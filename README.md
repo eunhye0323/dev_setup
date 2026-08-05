@@ -315,10 +315,10 @@ Hello World!
 | Result | <img src="./images/docker-logs-details.png" width="900"> |
 
 ### docker stats
-```bash 
-$ docker stats my-container
-
-```
+| | |
+|---|---|
+| Command | `$ docker stats` |
+| Result | <img src="./images/docker-stats.png" width="900"> |
 
 </details>
 
@@ -329,6 +329,26 @@ $ docker stats my-container
 
 <details open>
 <summary><h3>(8) Volume - Verify Docker volume persistence</h3></summary>
+
+### docker volume
+이름 있는 볼륨(`mydata`)을 생성해 컨테이너에 마운트하고 파일을 기록한 뒤, 컨테이너를 삭제하고 같은 볼륨을 새 컨테이너에 다시 마운트하여 데이터가 유지되는지 확인
+```bash
+$ docker volume create mydata
+mydata
+$ docker run -d --name vol-test -v mydata:/data ubuntu sleep infinity
+bc1c2bba2f0dd0040975dcf292cae58c772f22bce83a5b7b04795b2d923cd385
+$ docker exec -it vol-test bash -lc "echo hi > /data/hello.txt && cat /data/hello.txt"
+hi
+$ docker rm -f vol-test
+vol-test
+
+$ docker run -d --name vol-test2 -v mydata:/data ubuntu sleep infinity
+0c3a49ade617c8cc2b3b07c95f4b7e23103f3906c10d9db94b80725ce3604aac
+$ docker exec -it vol-test2 bash -lc "cat /data/hello.txt"
+hi
+$ docker rm -f vol-test2
+vol-test2
+```
 
 </details>
 
